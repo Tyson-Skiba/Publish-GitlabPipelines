@@ -61,7 +61,7 @@ Function Get-Changes{
 
     $changes = @()
     $rawChanges = git diff --name-only
-    
+
     foreach ($change in $rawChanges)
     {
         $detail = [PSCustomObject]@{
@@ -69,11 +69,11 @@ Function Get-Changes{
             Path = Get-Item $change
             Child = Get-ChildItem -Directory (Convert-Path $change)
         }
-        
+
         $changes += $detail
     }
 
-    Return $changes | Where-Object Value -Match "$RootDir*"   
+    Return $changes | Where-Object Value -Match "$RootDir*"
 }
 
 Function Write-Pipeline{
@@ -97,7 +97,7 @@ stages:
   allow_failure: false
   retry:
     max: 2
-    when: 
+    when:
     - runner_system_failure
 
 "@
@@ -118,9 +118,9 @@ release-$($projectName):
   extends: .release-base$imageTag
   stage: release
   variables:
-    PROJECT_NAME: $projectName 
+    PROJECT_NAME: $projectName
   script:
-    - echo $projectName 
+    - echo $projectName
 $jobScript
 "@
         $yaml = $yaml + $job
@@ -139,13 +139,13 @@ Function Publish-GitlabPipelines{
         [string] $Image
     )
 
-    Write-Host "Checking for system dependencies"
+    Write-Output "Checking for system dependencies"
     If (-Not (Test-Command -CmdName git)) {
-        Write-Host "Git is not installed"
+        Write-Output "Git is not installed"
         Exit -1
     }
 
-    Write-Host "Finding changes"
+    Write-Output "Finding changes"
     $targetPath = If ($null -Eq $RootDir) { "./" } Else { $RootDir }
     $targetPath = If ($targetPath.StartsWith("./")) { $targetPath } Else { "./" + $targetPath }
     $changes = Get-Changes -RootDir $RootDir
@@ -154,8 +154,8 @@ Function Publish-GitlabPipelines{
 
     $changedProjects = Test-Projects -Directories $projects -Files $changedFiles
 
-    Write-Host "Generating pipeline yaml"
+    Write-Output "Generating pipeline yaml"
     Write-Pipeline -Projects $changedProjects -Commands $Commands -Image $Image -RootDir $RootDir
-}   
+}
 
 Export-ModuleMember -Function 'Publish-GitlabPipelines'

@@ -30,7 +30,7 @@ CompanyName = 'Unknown'
 Copyright = '(c) Tyson Skiba. All rights reserved.'
 
 # Description of the functionality provided by this module
-# Description = ''
+Description = 'Use powershell to detect changes in monorepo directories and dynamically generate child pipelines for Gitlab.'
 
 # Minimum version of the PowerShell engine required by this module
 # PowerShellVersion = ''
@@ -101,7 +101,7 @@ PrivateData = @{
         # LicenseUri = ''
 
         # A URL to the main website for this project.
-        # ProjectUri = ''
+        ProjectUri = 'https://github.com/Tyson-Skiba/Publish-GitlabPipelines'
 
         # A URL to an icon representing this module.
         # IconUri = ''
